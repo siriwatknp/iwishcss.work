@@ -1,0 +1,28 @@
+{
+  "name": "nextra-blog-template",
+  "version": "0.0.1",
+  "description": "Nextra blog template",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/siriwatknp/nextra-blog-template.git"
+  },
+  "author": "Siriwat K. <siriwatkunaporn@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/siriwatknp/nextra-blog-template/issues"
+  },
+  "homepage": "https://github.com/siriwatknp/nextra-blog-template#readme",
+  "dependencies": {
+    "next": "latest",
+    "nextra": "latest",
+    "nextra-theme-blog": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "sharp": "latest"
+  }
+}

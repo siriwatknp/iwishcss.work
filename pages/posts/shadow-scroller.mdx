@@ -1,0 +1,117 @@
+---
+title: Shadow Scroller
+date: 2023/5/6
+description: A shadow on the edge of a scroll container can give a visual indicator to the user that the content can be scrolled.
+---
+
+When you apply `overflow: auto` to create a scrollable content, the container will have a sharp cut which is hard for users to know that the content is scrollable.
+
+Applying a shadow creates a better UX in my opinion. However, I could not find a good way to achieve it.
+
+## Attempt 1: scroll shadows
+
+![image](https://user-images.githubusercontent.com/18292247/236639879-b792ac1f-ec9e-4e5f-845f-3ab5de7be229.png)
+
+In summary, the implementation uses a combination of backgrounds and `background-attachment` to create shadows which works on x and y axis. You can read more details from [CSS tricks's post](https://css-tricks.com/books/greatest-css-tricks/scroll-shadows/) about the scroll shadows technique.
+
+The only flaw I found is that this technique does not work well when the content contains background because they will block the shadow (background) of the scroll container.
+
+## Attempt 2: pseudo elements
+
+At first, I thought that using a pseudo elements with `position: absolute` would stick to the edge of the container but as you can see in the demo below, the shadow does not always stick.
+
+import { PseudoAbsolute } from "../../components/ShadowScroller";
+
+<PseudoAbsolute />
+
+```css
+.container {
+  display: flex;
+  overflow: auto hidden;
+  position: relative;
+
+  &::after {
+    content: "";
+    display: block;
+    position: absolute;
+    right: 0;
+    height: 100%;
+    width: 40px;
+    background: linear-gradient(to left, rgba(0 0 0 / 0.2), rgba(0 0 0 / 0));
+  }
+}
+```
+
+Then, I tried another approach with `position: sticky` which produces a better result but still far from what I want because when the content is scrolled to the end, you still see the shadow 😢.
+
+import { PseudoSticky } from "../../components/ShadowScroller";
+
+<PseudoSticky />
+
+```css
+.container {
+  display: flex;
+  overflow: auto hidden;
+  position: relative;
+
+  &::after {
+    content: "";
+    display: block;
+    position: sticky;
+    right: 0;
+    align-self: stretch;
+    width: 40px;
+    flex: none;
+    background: linear-gradient(to left, rgba(0 0 0 / 0.2), rgba(0 0 0 / 0));
+  }
+}
+```
+
+## Attempt 3: mask image
+
+import { MaskImage } from "../../components/ShadowScroller";
+
+<MaskImage />
+
+```css
+.container {
+  display: flex;
+  gap: 0.5rem;
+  overflow: auto hidden;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    white 40px,
+    white calc(100% - 40px),
+    transparent
+  );
+}
+```
+
+Masking with gradient seems to be the best way in my opinion. The limitation is that you cannot apply colors to shadow, meaning you will get just faded content at the edge of the scroller.
+
+Also, you have to ensure that the left-edge of the scroller does not have faded shadow initially. Using CSS variables could help in this case:
+
+```css
+.container {
+  --item-gutter: 1rem;
+  display: flex;
+  overflow: auto hidden;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    white var(--item-gutter),
+    white calc(100% - var(--item-gutter)),
+    transparent
+  );
+}
+.item {
+  padding: 0 var(--item-gutter);
+}
+```
+
+## Summary
+
+So far, I don't have a perfect solution for all of the use cases. Each of the above approach can work for a specific scenario but you have to becareful for edge cases.
+
+Let me know if you found the solution!

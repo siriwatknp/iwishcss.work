@@ -1,5 +1,3 @@
-import Test from "./components/Test";
-
 /* eslint sort-keys: error */
 export default {
   components: {
@@ -15,7 +13,6 @@ export default {
         {children}
       </h1>
     ),
-    Test,
   },
   darkMode: true,
   dateFormatter: (date) => `Last updated at ${date.toDateString()}`,
